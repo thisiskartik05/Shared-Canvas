@@ -110,6 +110,13 @@ io.on("connect", (socket) => {
     socket.on("force_sync", (room, imageState) => {
       socket.broadcast.to(room).emit("on_force_sync", imageState);
     });
+
+    socket.on("chatMessage", (data) => {
+      socket.to(data.roomId).emit("messageReceived", {
+        text: data.message,
+        username: data.username,
+      });
+    });
     socket.on("disconnect", () => {
       boardroomSet.set(roomId, [
         boardroomSet.get(roomId)[0] - 1,

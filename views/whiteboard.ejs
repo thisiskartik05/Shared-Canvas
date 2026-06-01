@@ -9,26 +9,48 @@
     <script src="/socket.io/socket.io.js"></script>
   </head>
   <body>
-    <div class="body">
-      <div class="controls-left">
-        <input type="color" id="color" />
-        <input type="range" max="20" min="1" id="slider" value="3" />
+    <div class="app-container">
+      <div class="canvas-container">
+        <div class="body">
+          <div class="controls-left">
+            <input type="color" id="color" />
+            <input type="range" max="20" min="1" id="slider" value="3" />
+          </div>
+          <canvas id="canvas">Your browser does not support a canvas.</canvas>
+          <div class="controls-right">
+            <button class="controls-button" onclick="undo()">Undo</button>
+            <button class="controls-button" onclick="clear_screen()" id="clear">
+              Clear
+            </button>
+            <a href="" download id="download"
+              ><button class="controls-button" onclick="download()">
+                Save
+              </button></a
+            >
+            <button class="controls-button" onclick="copycode()">
+              Copy Board ID
+            </button>
+            <form action="/" method="GET">
+              <button type="submit" class="controls-button">Leave board</button>
+            </form>
+          </div>
+        </div>
       </div>
-      <canvas id="canvas">Your browser does not support a canvas.</canvas>
-      <div class="controls-right">
-        <button class="controls-button" onclick="undo()">Undo</button>
 
-        <button class="controls-button" onclick="clear_screen()" id="clear">
-          Clear
-        </button>
-        <a href="" download id="download"
-          ><button class="controls-button" onclick="download()">Save</button></a
-        >
-        <button class="controls-button" onclick="copycode()">
-          Copy Board ID
-        </button>
-        <form action="/" method="GET">
-          <button type="submit" class="controls-button">Leave board</button>
+      <div class="chat-sidebar" id="chatSidebar">
+        <div class="chat-header">
+          <h3 style="margin: 0; font-size: 1.2rem; color: #333">Room Chat</h3>
+        </div>
+        <div class="chat-messages" id="chatMessages"></div>
+        <form class="chat-form" id="chatForm">
+          <input
+            type="text"
+            id="chatInput"
+            placeholder="Type a message..."
+            autocomplete="off"
+            required
+          />
+          <button type="submit">Send</button>
         </form>
       </div>
     </div>
@@ -190,5 +212,44 @@
         undo();
       }
     });
+    // --- LIVE CHAT LOGIC ---
+    const chatForm = document.getElementById("chatForm");
+    const chatInput = document.getElementById("chatInput");
+    const chatMessages = document.getElementById("chatMessages");
+
+    chatForm.addEventListener("submit", (e) => {
+      e.preventDefault();
+      const message = chatInput.value.trim();
+      if (!message) return;
+
+      // Send to server using your existing roomId and sname variables
+      socket.emit("chatMessage", {
+        roomId: roomId,
+        message: message,
+        username: sname,
+      });
+
+      // Post to own screen
+      appendMessage({ text: message, username: "You" }, "outgoing");
+      chatInput.value = "";
+      chatMessages.scrollTop = chatMessages.scrollHeight;
+    });
+
+    socket.on("messageReceived", (data) => {
+      appendMessage(data, "incoming");
+      chatMessages.scrollTop = chatMessages.scrollHeight;
+    });
+
+    function appendMessage(data, type) {
+      const messageDiv = document.createElement("div");
+      messageDiv.classList.add("message", type);
+
+      if (type === "incoming") {
+        messageDiv.innerHTML = `<span class="message-user">${data.username}</span>${data.text}`;
+      } else {
+        messageDiv.innerText = data.text;
+      }
+      chatMessages.appendChild(messageDiv);
+    }
   </script>
 </html>

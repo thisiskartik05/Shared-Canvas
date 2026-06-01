@@ -1,52 +1,200 @@
-SyncBoard
-SyncBoard is a full-stack, real-time collaborative whiteboard and communication platform built on a WebSocket infrastructure. Designed for seamless brainstorming and remote teamwork, it enables multiple authenticated users to draw, chat, and manage shared canvas states instantly in isolated room sessions.
+# SyncBoard
 
-🚀 Live Demo
-Experience the live application deployed on Render: syncboard-ualb.onrender.com
+SyncBoard is a full-stack, real-time collaborative workspace built using Node.js, Express.js, Socket.io, and MongoDB Atlas. It enables authenticated users to create shared drawing rooms, collaborate on a synchronized whiteboard, communicate through integrated room chat, and maintain consistent canvas state across connected clients.
 
-(Note: Free-tier instances spin down during periods of inactivity; the initial link load may take 30–50 seconds to wake up the server).
+## 🚀 Live Demo
 
-✨ Features
-Collaborative Whiteboard: A low-latency shared virtual canvas allowing concurrent users to draw, annotate, and customize brush color/thickness simultaneously.
+**Live Application:** https://syncboard-ualb.onrender.com
 
-Multiplayer Undo Protocol: A stack-based canvas history manager supporting Ctrl + Z shortcuts that safely removes local actions without impacting concurrent peers.
+> Note: The application is deployed on Render's free tier. If the service has been idle, the initial request may take 30-50 seconds while the container wakes up.
 
-Global State Synchronization: An automated fallback protocol that captures localized base64 canvas snapshots and broadcasts force-sync state updates to eliminate multi-client drawing drift.
+---
 
-Real-Time Room Chat: An integrated sidebar messaging panel driving instant group communication right alongside the canvas layout.
+## ✨ Features
 
-Secure Authentication: Complete user onboarding flow featuring passport-driven registration, hashed credential logins, and secure express-session management.
+### Real-Time Collaborative Whiteboard
 
-🛠️ Tech Stack
-Frontend: EJS (Embedded JavaScript templates), CSS3, Vanilla JavaScript, Bootstrap 4
+* Multi-user synchronized drawing using Socket.io
+* Adjustable brush size and color selection
+* Instant propagation of drawing events to connected clients
+* Room-based collaboration using unique board IDs
 
-Backend: Node.js, Express.js, Socket.io (WebSockets Architecture)
+### Multiplayer Undo System
 
-Database: MongoDB (Mongoose ODM)
+* Local canvas history management using a stack-based approach
+* Keyboard shortcut support (`Ctrl + Z`)
+* Consistent undo behavior across all connected clients
 
-Deployment: Render Cloud Platform
+### Global State Synchronization
 
-📦 Getting Started
-1. Clone the Repository
-Bash
+* Force-sync protocol to prevent client state divergence
+* Base64 canvas snapshots broadcast to all room members
+* Automatic correction of desynchronized canvases
+
+### Real-Time Room Chat
+
+* Integrated room-specific messaging sidebar
+* Instant message delivery through WebSockets
+* Separate handling of incoming and outgoing messages
+
+### Authentication & Security
+
+* User registration and login system
+* Password hashing using bcrypt
+* Session-based authentication using express-session
+* MongoDB-backed user management
+
+---
+
+## 🛠️ Tech Stack
+
+### Frontend
+
+* EJS
+* HTML5
+* CSS3
+* Vanilla JavaScript
+
+### Backend
+
+* Node.js
+* Express.js
+* Socket.io
+
+### Database
+
+* MongoDB Atlas
+* Mongoose ODM
+
+### Authentication
+
+* bcrypt
+* express-session
+* cookie-parser
+
+### Deployment
+
+* Render
+
+---
+
+## 🏗️ System Architecture
+
+```mermaid
+flowchart LR
+
+A[User Browser]
+--> B[EJS Frontend]
+
+B --> C[Socket.io Client]
+C <--> D[Express + Socket.io Server]
+
+D --> E[Room Management]
+D --> F[Authentication]
+
+F --> G[(MongoDB Atlas)]
+
+E --> H[Canvas Synchronization]
+E --> I[Real-Time Chat]
+```
+
+---
+
+## ⚡ Real-Time Drawing Flow
+
+```mermaid
+sequenceDiagram
+
+participant UserA
+participant Server
+participant UserB
+
+UserA->>Server: draw(x1,y1,x2,y2,color,width)
+Server->>UserB: ondraw(...)
+UserB->>Canvas: Render Stroke
+```
+
+---
+
+## 📦 Installation
+
+### Clone Repository
+
+```bash
 git clone https://github.com/thisiskartik05/SyncBoard.git
 cd SyncBoard
-2. Install Dependencies
-Bash
+```
+
+### Install Dependencies
+
+```bash
 npm install
-3. Set Up Environment Variables
-Create a file named .env in the root of the project directory and supply your connection strings:
+```
 
-Code snippet
+### Configure Environment Variables
+
+Create a `.env` file in the root directory:
+
+```env
 MONGO_URI=your_mongodb_atlas_connection_string
-SESSION_SECRET=your_random_express_session_secret
+SESSION_SECRET=your_session_secret
 PORT=3000
-4. Launch the Application
-To boot up the production-ready server instance local pipeline:
+```
 
-Bash
+### Start Development Server
+
+```bash
 npm start
-Open http://localhost:3000 in your browser to interact with the environment.
+```
 
-🤝 Contributing
-Contributions, issue reports, and feature requests are welcome! Feel free to fork this repository, make adjustments, and submit a pull request.
+Application will be available at:
+
+```text
+http://localhost:3000
+```
+
+---
+
+## 📂 Project Structure
+
+```text
+SyncBoard
+│
+├── database/
+├── routes/
+├── public/
+├── views/
+├── utils/
+│
+├── server.js
+├── package.json
+└── README.md
+```
+
+---
+
+## 🔮 Future Improvements
+
+* Persistent whiteboard state storage
+* Board version history
+* Collaborative sticky notes
+* Voice communication integration
+* Redis-backed scaling for large rooms
+* Drawing replay functionality
+
+---
+
+## 🤝 Contributing
+
+Contributions, issue reports, and feature suggestions are welcome.
+
+1. Fork the repository
+2. Create a feature branch
+3. Commit your changes
+4. Open a Pull Request
+
+---
+
+## 📜 License
+
+This project is licensed under the MIT License.

@@ -1,31 +1,52 @@
-# Realtime Whiteboard Collaboration and Video Conferencing Platform
+SyncBoard
+SyncBoard is a full-stack, real-time collaborative whiteboard and communication platform built on a WebSocket infrastructure. Designed for seamless brainstorming and remote teamwork, it enables multiple authenticated users to draw, chat, and manage shared canvas states instantly in isolated room sessions.
 
-This web-based real-time communication platform, built on `Node.js`, offers a seamless video conferencing experience, allowing users to connect from anywhere. With integrated in-call chat and a collaborative whiteboard feature, the platform is designed to enhance both communication and teamwork. The interactive whiteboard functions as a virtual canvas, enabling users to draw, write, and share media in real-time.
+🚀 Live Demo
+Experience the live application deployed on Render: syncboard-ualb.onrender.com
 
-## Features
-- **Video Conferencing with In-Call Messaging:** Connect and communicate with others via high-quality video calls, with the ability to send messages during the session.
-- **Collaborative Whiteboard:** A shared virtual canvas where users can draw, annotate, and collaborate in real-time.
-- **User Authentication:** Secure user registration and login with email verification.
+(Note: Free-tier instances spin down during periods of inactivity; the initial link load may take 30–50 seconds to wake up the server).
 
-## Tech Stack
-- **Frontend:** EJS (Embedded JavaScript)
-- **Backend:** Node.js, Express.js, Socket.io
-- **Database:** MongoDB
-- **WebRTC:** PeerJS (for real-time communication)
+✨ Features
+Collaborative Whiteboard: A low-latency shared virtual canvas allowing concurrent users to draw, annotate, and customize brush color/thickness simultaneously.
 
-## Getting Started
-1. Clone the repository.
-2. Install the dependencies:
-   ```bash
-   npm install
-   ```
-3. Run the development server:
-   ```bash
-   npm start
-   ```
-4. Access the platform at `http://localhost:3000`.
+Multiplayer Undo Protocol: A stack-based canvas history manager supporting Ctrl + Z shortcuts that safely removes local actions without impacting concurrent peers.
 
-## Contributing
-Contributions are welcome! Please feel free to submit a pull request or open an issue to discuss improvements.
+Global State Synchronization: An automated fallback protocol that captures localized base64 canvas snapshots and broadcasts force-sync state updates to eliminate multi-client drawing drift.
 
----
+Real-Time Room Chat: An integrated sidebar messaging panel driving instant group communication right alongside the canvas layout.
+
+Secure Authentication: Complete user onboarding flow featuring passport-driven registration, hashed credential logins, and secure express-session management.
+
+🛠️ Tech Stack
+Frontend: EJS (Embedded JavaScript templates), CSS3, Vanilla JavaScript, Bootstrap 4
+
+Backend: Node.js, Express.js, Socket.io (WebSockets Architecture)
+
+Database: MongoDB (Mongoose ODM)
+
+Deployment: Render Cloud Platform
+
+📦 Getting Started
+1. Clone the Repository
+Bash
+git clone https://github.com/thisiskartik05/SyncBoard.git
+cd SyncBoard
+2. Install Dependencies
+Bash
+npm install
+3. Set Up Environment Variables
+Create a file named .env in the root of the project directory and supply your connection strings:
+
+Code snippet
+MONGO_URI=your_mongodb_atlas_connection_string
+SESSION_SECRET=your_random_express_session_secret
+PORT=3000
+4. Launch the Application
+To boot up the production-ready server instance local pipeline:
+
+Bash
+npm start
+Open http://localhost:3000 in your browser to interact with the environment.
+
+🤝 Contributing
+Contributions, issue reports, and feature requests are welcome! Feel free to fork this repository, make adjustments, and submit a pull request.
